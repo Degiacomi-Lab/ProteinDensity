@@ -42,9 +42,18 @@ ATOMIC_RADII = {'H'   : 0.120, 'He'  : 0.140, 'Li'  : 0.076, 'Be' : 0.059,
 
 def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surface_atoms=[], sasa_theshold=0.05, void_threshold=3, box=True, boxnum = 5, box_leeway=5):
     
-    #PDB has to be a string pointing to a pdb file (for now...)
-    U = mda.Universe(pdb)
-    protein = U.select_atoms("protein")
+    #if pdb is a string then assume it is a string that refers to a pdb file in
+    #the cwd. Create a MDA Universe of this pdb. Select protein atoms.
+    if type(pdb) is str:
+        U = mda.Universe(pdb)
+        protein = U.select_atoms("protein")        
+    #if pdb file is not a string, assume it is already an MDA Universe or atom group
+    #Select protein atoms.
+    else:
+        U = pdb
+        protein = U.select_atoms("protein
+
+    # get solvent atoms                             
     solvent = U.select_atoms("resname SOL or resname WAT")
 
     #get vdw radii for protein and water
@@ -54,6 +63,8 @@ def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surf
     wat_elements = solvent.atoms.elements
     wat_radii = [ATOMIC_RADII[element]*10 for element in wat_elements]
     
+    # rotate protein to change its position on the grid instantiated around it.
+    # successive repeats with rotations should lead to more accurate results.
     
     if rotate == True:
         angle = np.random.random(1)*360
@@ -62,6 +73,7 @@ def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surf
         ag = U.atoms
         rotated = transformations.rotate.rotateby(angle, direction, ag=ag)(ts)
 
+    # if surface atoms are not given, calculate them from the sasa function
     
     if len(surface_atoms) == 0:
         _,_,surface_atoms,_ = sasa(pdb, threshold = sasa_theshold)
@@ -70,8 +82,9 @@ def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surf
     
     prot_positions = protein.positions
     sol_positions = solvent.positions
-    
-    minpos = np.min(prot_positions, axis = 0) - leeway #How low could this distance go?
+
+    # initiate a grid around the protein
+    minpos = np.min(prot_positions, axis = 0) - leeway 
     maxpos = np.max(prot_positions, axis = 0) + leeway
     myxrange = np.arange(minpos[0], maxpos[0], step)
     myyrange = np.arange(minpos[1], maxpos[1], step)
@@ -147,7 +160,7 @@ def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surf
     
     else:
         
-        # implement double cubic lattice like structure by dividing the grid into boxes
+        # dividing the grid into boxes
         # defined by a multiple of the step size, boxsize
             
         def boxsplit(arr, n=boxnum):
