@@ -19,10 +19,13 @@ Calculates the volume of each residue via a similar principle to protein_volume_
 Built on the protein_volume_residues function. Calculates the volume of each residue via the method outlined above, while also giving an indication as to the level of solvent exposure of a residue, as defined by the Shrake-Rupley Rolling Ball algorithm implementation in sasa_residues.py.
 
 ### sasa_residues.py
+Similar to the sasa function found in the [biobox python package](https://github.com/Degiacomi-Lab/biobox), but adapted to give more detailed data on the solvent exposure of each protein atom in order to be useful to the protein_volume_residues_surf_int.py function.
 
 ### find_internal_waters.py
+Clusters water molecules surrounding a protein using DBSCAN, with the clusters filtered to reveal which represent water molecules in the protein interior.
 
 ### order_parameters.py
+Methods for calculating three order parameters: the local structure index (LSI), orientational tetrahedral order parameter (_q_), and the translational tetrahedral order parameter (S<sub>k</sub>).
 
 
 
