@@ -1,6 +1,3 @@
-
-
-
 import numpy as np
 import itertools
 import MDAnalysis as mda
@@ -14,9 +11,7 @@ def protein_volume_boxes(pdb, step=1, leeway=5, shell=6, boxnum=8, box_leeway=5,
     if type(pdb) is str:
         U = mda.Universe(pdb)
         protein = U.select_atoms("protein")
-        
-    #elif isinstance(pdb, mda.core.groups.AtomGroup):
-        
+                
     #if pdb file is not a string, assume it is already an MDA Universe or atom group
     #Select protein atoms.
     else:
@@ -43,7 +38,7 @@ def protein_volume_boxes(pdb, step=1, leeway=5, shell=6, boxnum=8, box_leeway=5,
     yrange = np.arange(minpos[1], maxpos[1], step)
     zrange = np.arange(minpos[2], maxpos[2], step)
     
-    # implement double cubic lattice like structure by dividing the grid into boxes
+    # implement memory-saving boxes by dividing the grid into several component grids
     # defined by a multiple of the step size, boxsize
         
     def boxsplit(arr, n=boxnum):
