@@ -40,7 +40,7 @@ ATOMIC_RADII = {'H'   : 0.120, 'He'  : 0.140, 'Li'  : 0.076, 'Be' : 0.059,
                 'Uus' : 0.200, 'Uuo' : 0.200} 
 
 
-def protein_volume_void_box(pdb, step=1, leeway=5, shell=6, rotate = False, surface_atoms=[], sasa_theshold=0.05, void_threshold=3, box=True, boxnum = 5, box_leeway=5):
+def protein_excess_volume_boxes(pdb, step=1, leeway=5, shell=6, rotate = False, surface_atoms=[], sasa_theshold=0.05, void_threshold=3, box=True, boxnum = 5, box_leeway=5):
     
     #if pdb is a string then assume it is a string that refers to a pdb file in
     #the cwd. Create a MDA Universe of this pdb. Select protein atoms.
