@@ -1,0 +1,4 @@
+mdanalysis==2.7.0
+mdtraj==1.10.0
+scipy==1.14.1
+pandas==2.2.3
