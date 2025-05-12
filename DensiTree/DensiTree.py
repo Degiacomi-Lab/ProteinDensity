@@ -6,6 +6,7 @@ import scipy.spatial.distance as dist
 import numpy as np
 import mdtraj as md
 import MDAnalysis as mda
+from MDAnalysis.analysis.dssp import DSSP
 import sys
 import scipy.spatial.distance as sdist
 import pandas as pan
@@ -14,7 +15,6 @@ import os
 import pickle
 
 
-#%%
 class Sequence():
     def __init__(self, sequence, chain="default"):
         self.sequence = sequence
@@ -362,9 +362,12 @@ class Structure():
         return {"Net charge": charge, "Mass": mass}
     
     def est_secondary_structure(self):
+        
         pdb = self.structure
-        traj = md.load(pdb)
-        dssp = md.compute_dssp(traj)[0]
+        
+        u = mda.Universe(pdb)
+        dssp = DSSP(u).run().results.dssp[0]
+
         
         coil_percent = 100*sum(dssp=="C")/len(dssp)
         strand_percent = 100*sum(dssp=="E")/len(dssp)
@@ -559,10 +562,3 @@ class Structure():
         
         return prediction, feats
         
-    
-
-#%%
-
-prediction, feats = Structure("sample_data/5pti_frame_0_nowater.pdb", important_features=True).predict()
-
-prediction_seq, feats_seq = Sequence("sample_data/5pti_frame_0_nowater.pdb", chain="M").predict()
