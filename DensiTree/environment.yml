@@ -3,10 +3,10 @@ channels:
   - conda-forge
 dependencies:
   - mdanalysis==2.7.0
+  - numpy==1.26.2
   - mdtraj==1.10.0
   - scipy==1.14.1
   - pandas==2.2.3
   - scikit-learn==1.5.2
   - ipywidgets==7.6.0
-  - numpy
 
