@@ -4,7 +4,6 @@
 # Imports
 import scipy.spatial.distance as dist
 import numpy as np
-import mdtraj as md
 import MDAnalysis as mda
 from MDAnalysis.analysis.dssp import DSSP
 import sys
