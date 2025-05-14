@@ -560,9 +560,10 @@ class Structure():
                 with open("random_forests/RF_300_all.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
             
-            
         feats = self.featurize(important_features=important_features)
         
         prediction = RF.predict(feats)[0]
         
         return prediction, feats
+           
+    
