@@ -13,9 +13,8 @@ import pickle
 import os
 import pickle
 
-
 class Sequence():
-    def __init__(self, sequence, temp="310.15K", chain="default"):
+    def __init__(self, sequence, temp="300K", chain="default"):
         self.temp = temp
         self.sequence = sequence
         self.chain = chain
@@ -116,7 +115,7 @@ class Sequence():
             
         
 class Structure():
-    def __init__(self, structure, temp="310.15K", important_features=False, chain="default"):
+    def __init__(self, structure, temp="300K", important_features=False, chain="default"):
         self.temp = temp
         self.important_features = important_features
         self.structure = structure
@@ -568,4 +567,3 @@ class Structure():
         
         return prediction, feats
            
-    
