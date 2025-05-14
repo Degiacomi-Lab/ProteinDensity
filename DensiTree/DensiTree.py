@@ -15,7 +15,8 @@ import pickle
 
 
 class Sequence():
-    def __init__(self, sequence, chain="default"):
+    def __init__(self, sequence, temp="310.15K", chain="default"):
+        self.temp = temp
         self.sequence = sequence
         self.chain = chain
         
@@ -93,22 +94,20 @@ class Sequence():
             
         return amino_acid_composition
     
-    def predict(self, RF="default"):
+    def predict(self):
         
 
             
-        if RF == "default":
-            with open("random_forests/RF_seq.pickle", "rb") as r_file:
-                RF_seq = pickle.load(r_file)
+        if self.temp == "310.15K":
+            with open("random_forests/310.15K/RF_310_seq.pickle", "rb") as r_file:
+                RF = pickle.load(r_file)
+        elif self.temp == "300K":
+            with open("random_forests/RF_300_seq.pickle", "rb") as r_file:
+                RF = pickle.load(r_file)
             
-        #else:
-            #assert
-
-        #feats = np.array(list(self.amino_acid_composition().values())).reshape(1,-1)
-        
+            
         feats = pan.DataFrame(self.amino_acid_composition(), index=[0])
-
-        prediction = RF_seq.predict(feats)[0]
+        prediction = RF.predict(feats)[0]
         
         return prediction, feats
         
@@ -117,7 +116,8 @@ class Sequence():
             
         
 class Structure():
-    def __init__(self, structure, important_features=False):
+    def __init__(self, structure, temp="310.15K", important_features=False, chain="default"):
+        self.temp = temp
         self.important_features = important_features
         self.structure = structure
         self.important_features_list = ['SER %',
@@ -217,6 +217,8 @@ class Structure():
         #residues, str: a list of three-letter residue codes
         
         structure = self.structure
+        chain = self.chain
+
         # define dictionary of one and three letter amino acid residue codes, required if seq is not a PDB file
         all_residues_dict = {
         'V': 'VAL', 'R': 'ARG', 'S': 'SER', 'L': 'LEU', 
@@ -229,6 +231,9 @@ class Structure():
         if structure.endswith(".pdb") or fmt == "pdb":
             # initiate MDAnalysis Universe of chain of seq, to easily extract three-letter residue codes
             if not structure.endswith(".pdb"): structure+=".pdb"
+            if chain == "default":
+                u = mda.Universe(structure).select_atoms("protein")
+                chain = u.chainIDs[0]
             u = mda.Universe(structure).select_atoms(f"protein and chainid {chain}")
             residues = u.residues.resnames
             residues = np.where((residues=="HIE") | (residues=="HID") | 
@@ -536,28 +541,31 @@ class Structure():
         return structure_feats
         
     
-    def predict(self, RF="default"):
+    def predict(self):
         
         important_features = self.important_features
         
-        if RF == "default":
+        if self.temp == "310.15K":
             if important_features == True:
-                with open("random_forests/RF_20.pickle", "rb") as r_file:
+                with open("random_forests/310.15K/RF_310_20.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
             else:
-                with open("random_forests/RF_all.pickle", "rb") as r_file:
+                with open("random_forests/310.15K/RF_310_all.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
 
-        else:
-            try:
-                with open(RF, "rb") as r_file:
+        elif self.temp == "300K":
+            if important_features == True:
+                with open("random_forests/RF_300_20.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
-            except:
-                print("Random forest error. The Random Forest Regressor should be uploaded as a pickle binary file to the home directory.")
-
+            else:
+                with open("random_forests/RF_300_all.pickle", "rb") as r_file:
+                    RF = pickle.load(r_file)
+            
+            
         feats = self.featurize(important_features=important_features)
         
         prediction = RF.predict(feats)[0]
         
         return prediction, feats
-        
+           
+    
