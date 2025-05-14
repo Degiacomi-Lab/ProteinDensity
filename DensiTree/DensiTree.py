@@ -14,7 +14,7 @@ import os
 import pickle
 
 class Sequence():
-    def __init__(self, sequence, temp="300K", chain="default"):
+    def __init__(self, sequence, temp="300 K", chain="default"):
         self.temp = temp
         self.sequence = sequence
         self.chain = chain
@@ -97,10 +97,10 @@ class Sequence():
         
 
             
-        if self.temp == "310.15K":
+        if self.temp == "310.15 K":
             with open("random_forests/310.15K/RF_310_seq.pickle", "rb") as r_file:
                 RF = pickle.load(r_file)
-        elif self.temp == "300K":
+        elif self.temp == "300 K":
             with open("random_forests/RF_300_seq.pickle", "rb") as r_file:
                 RF = pickle.load(r_file)
             
@@ -115,7 +115,7 @@ class Sequence():
             
         
 class Structure():
-    def __init__(self, structure, temp="300K", important_features=False, chain="default"):
+    def __init__(self, structure, temp="300 K", important_features=False, chain="default"):
         self.temp = temp
         self.important_features = important_features
         self.structure = structure
@@ -544,7 +544,7 @@ class Structure():
         
         important_features = self.important_features
         
-        if self.temp == "310.15K":
+        if self.temp == "310.15 K":
             if important_features == True:
                 with open("random_forests/310.15K/RF_310_20.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
@@ -552,7 +552,7 @@ class Structure():
                 with open("random_forests/310.15K/RF_310_all.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
 
-        elif self.temp == "300K":
+        elif self.temp == "300 K":
             if important_features == True:
                 with open("random_forests/RF_300_20.pickle", "rb") as r_file:
                     RF = pickle.load(r_file)
@@ -566,4 +566,3 @@ class Structure():
         prediction = RF.predict(feats)[0]
         
         return prediction, feats
-           
