@@ -16,8 +16,6 @@ def protein_volume_residues(pdb, step=0.5, leeway=5, threshold = 3, rotate = Fal
         U = mda.Universe(pdb)
         protein = U.select_atoms("protein")
         
-    #elif isinstance(pdb, mda.core.groups.AtomGroup):
-        
     #if pdb file is not a string, assume it is already an MDA Universe
     #Select protein atoms.
     elif type(pdb) == mda.core.universe.Universe:

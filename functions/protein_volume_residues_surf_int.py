@@ -10,15 +10,13 @@ from functions.sasa_residues import sasa
 import pandas as pan
        
 def protein_volume_residues(pdb, step=0.5, leeway=5, threshold = 6, surf_threshold_percent = 5, rotate = False, skip_tol = 0):
-    print(pdb)
+
     #if pdb is a string then assume it is a string that refers to a pdb file in
     #the cwd. Create a MDA Universe of this pdb. Select protein atoms.
     if type(pdb) is str:
         U = mda.Universe(pdb)
         protein = U.select_atoms("protein")
-        
-    #elif isinstance(pdb, mda.core.groups.AtomGroup):
-        
+       
     #if pdb file is not a string, assume it is already an MDA Universe
     #Select protein atoms.
     elif type(pdb) == mda.core.universe.Universe:
@@ -39,9 +37,8 @@ def protein_volume_residues(pdb, step=0.5, leeway=5, threshold = 6, surf_thresho
     asa, mesh_pts, surface_atoms, indices, cnts = sasa(pdb, threshold = 0, return_count = True)
     
     atom_resnums = protein.resnums
-
+       
     cnts_percent = 100*(cnts/960)
-
 
     # Find positions of protein atoms
     protein_positions = protein.positions
