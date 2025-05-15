@@ -74,7 +74,7 @@ class Sequence():
             return residues
         
         else:
-            print("Incomprehensible seq string: {seq}")
+            print(f"Incomprehensible seq string: {seq}")
             return
         
     def amino_acid_composition(self):
